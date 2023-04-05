@@ -1,61 +1,115 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:tic_tac_toe/components/PlayerCard.dart';
 import 'package:tic_tac_toe/components/XOGrid.dart';
-import 'package:tic_tac_toe/constants/colors.dart';
+import 'package:tic_tac_toe/utils/colors.dart';
+import 'package:tic_tac_toe/utils/constants.dart';
+import 'package:tic_tac_toe/utils/utility.dart';
 
 class GameScreen extends StatefulWidget {
-
   final int rows;
 
-  const GameScreen({Key? key, required this.rows}) : super(key: key);
+  final String playerOne;
+
+  final String playerTwo;
+
+  const GameScreen(
+      {Key? key,
+      required this.rows,
+      required this.playerOne,
+      required this.playerTwo})
+      : super(key: key);
 
   @override
-  State<GameScreen> createState() => _GameScreenState();
+  State<GameScreen> createState() => _GameScreenState(rows: this.rows);
 }
 
-class _GameScreenState  extends State<GameScreen> {
+List<String> getInitialValueHolderData(int number) {
+  List<String> valueHolder = List.filled(number * number, EMPTY_STRING);
+  return valueHolder;
+}
 
-  int getMatrixNumberForIndex(int index, int rows){
-    var updatedIndex = index + 1;
-    var unitDigit = updatedIndex % rows != 0 ? updatedIndex % rows : rows;
-    var tensDigit = (index / rows).toInt() + 1;
-    return (tensDigit *10) + unitDigit;
+class _GameScreenState extends State<GameScreen> {
+  bool isPlayerOneEnabled = true;
+  int rows;
+  List<String> valueHolder = [];
+
+  @override
+  void initState() {
+    super.initState();
+    valueHolder = getInitialValueHolderData(rows);
   }
 
+  _GameScreenState({required this.rows});
+
   Map<String, Color> getGridStyles(int matrixNumber) {
-    var gridStyles =  Map<String, Color>();
-    gridStyles['backgroundColor'] = matrixNumber % 2 == 0 ? AppColors.accentColor :  AppColors.secondaryColor;
-    gridStyles['textColor'] = matrixNumber % 2 == 0 ? AppColors.secondaryColor :  AppColors.primaryColor;
+    var gridStyles = Map<String, Color>();
+    gridStyles['backgroundColor'] =
+        matrixNumber % 2 == 0 ? AppColors.primaryColor : AppColors.whiteColor;
+    gridStyles['textColor'] =
+        matrixNumber % 2 == 0 ? AppColors.blackColor : AppColors.blackColor;
     return gridStyles;
   }
 
-  int getSum(n)
-  {
-    var sum = 0;
-    while (n != 0) {
-      sum = (sum + (n % 10).toInt()).toInt();
-      n = (n / 10).toInt();
-    }
-    return sum;
+  Map<String, Color> getPlayerCardStyles(bool isPlayerX) {
+    var cardStyles = Map<String, Color>();
+    var flag = isPlayerX ? isPlayerOneEnabled : !isPlayerOneEnabled;
+    cardStyles['backgroundColor'] =
+        flag ? AppColors.primaryColor : AppColors.whiteColor;
+    cardStyles['textColor'] =
+        flag ? AppColors.blackColor : AppColors.blackColor;
+    return cardStyles;
   }
 
+  void onXOGridTap(int index) {
+    var char = isPlayerOneEnabled ? 'X' : 'O';
+    if (valueHolder[index] == '') {
+      setState(() {
+        valueHolder[index] = char;
+        isPlayerOneEnabled = !isPlayerOneEnabled;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: GridView.builder(
-            itemCount: widget.rows * widget.rows,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: widget.rows,
-            ),
-            itemBuilder: (BuildContext context, int index) {
-              var matrixNumber =  getMatrixNumberForIndex(index, widget.rows);
-              return XOGrid(
-                  text: matrixNumber.toString(),
-                  gridStyles: getGridStyles(getSum(matrixNumber)),
-                  onGridTapped: () => {
-              });
-            }),
+        child: Column(
+          children: [
+            Expanded(
+                child: GridView.builder(
+                    itemCount: 2,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      return PlayerCard(
+                        index == 0 ? widget.playerOne : widget.playerTwo,
+                        getPlayerCardStyles(index == 0),
+                        index == 0,
+                      );
+                    })),
+            Expanded(
+                flex: 4,
+                child: GridView.builder(
+                    itemCount: widget.rows * widget.rows,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: widget.rows,
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      var matrixNumber =
+                          getMatrixNumberForIndex(index, widget.rows);
+                      var index1 =
+                          getIndexForMatrixNumber(matrixNumber, widget.rows);
+                      return XOGrid(
+                          valueHolder.isNotEmpty ? valueHolder[index] : '',
+                          getGridStyles(getSum(matrixNumber)),
+                          () => {onXOGridTap(index)});
+                    })),
+          ],
+        ),
       ),
     );
   }

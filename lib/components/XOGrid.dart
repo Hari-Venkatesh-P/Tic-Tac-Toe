@@ -1,49 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:tic_tac_toe/constants/colors.dart';
+import 'package:tic_tac_toe/utils/colors.dart';
 
-class XOGrid extends StatefulWidget {
-
+class XOGrid extends StatelessWidget {
   final String text;
 
-  final Map<String, Color>? gridStyles;
+  final Map<String, Color> gridStyles;
 
   final VoidCallback onGridTapped;
 
-  const XOGrid({Key? key, required this.text, required this.onGridTapped, this.gridStyles}) : super(key: key);
-
-
-  @override
-  State<XOGrid> createState() => _XOGridState();
-}
-
-class _XOGridState  extends State<XOGrid> {
-
-
+  const XOGrid(this.text, this.gridStyles, this.onGridTapped);
 
   @override
   Widget build(BuildContext context) {
-    return  GestureDetector(
-        onTap: widget.onGridTapped,
-      child : Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(
-            width: 1,
-            color: widget.gridStyles!.containsKey('backgroundColor') ? widget.gridStyles!['backgroundColor']! : AppColors.blackColor,
+    return GestureDetector(
+        onTap: onGridTapped,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 1,
+              color: AppColors.blackColor,
+            ),
+            color: gridStyles!.containsKey('backgroundColor')
+                ? gridStyles!['backgroundColor']!
+                : AppColors.blackColor,
           ),
-          color: AppColors.blackColor,
-        ),
-        child: Center(
-          child: Text(
-            '${widget.text}',
-            style: TextStyle(
-              fontSize: 32,
-              color: widget.gridStyles!.containsKey('textColor') ? widget.gridStyles!['textColor']! : AppColors.secondaryColor,
+          child: Center(
+            child: Text(
+              '${text}',
+              style: TextStyle(
+                fontSize: 32,
+                color: gridStyles!.containsKey('textColor')
+                    ? gridStyles!['textColor']!
+                    : AppColors.secondaryColor,
+              ),
             ),
           ),
-        ),
-      )
-    );
-
+        ));
   }
 }
