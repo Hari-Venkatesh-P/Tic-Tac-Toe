@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/components/PlayerCard.dart';
 import 'package:tic_tac_toe/components/XOGrid.dart';
+import 'package:tic_tac_toe/main.dart';
 import 'package:tic_tac_toe/utils/colors.dart';
 import 'package:tic_tac_toe/utils/constants.dart';
 import 'package:tic_tac_toe/utils/utility.dart';
@@ -70,6 +71,27 @@ class _GameScreenState extends State<GameScreen> {
         isPlayerOneEnabled = !isPlayerOneEnabled;
       });
     }
+
+    if(!valueHolder.contains(EMPTY_STRING)){
+      stderr.writeln(valueHolder);
+      stderr.writeln(valueHolder.contains(EMPTY_STRING));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        duration: const Duration(days: 1),
+        content: const Text('Game over , Go back'),
+        action: SnackBarAction(
+          label: 'Ok',
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const MyHomePage()),
+            );
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            // Some code to undo the change.
+          },
+        ),
+      ));
+    }
   }
 
   @override
@@ -81,7 +103,7 @@ class _GameScreenState extends State<GameScreen> {
             Expanded(
                 child: GridView.builder(
                     itemCount: 2,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                     ),
                     itemBuilder: (BuildContext context, int index) {

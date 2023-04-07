@@ -8,7 +8,7 @@ class XOGrid extends StatelessWidget {
 
   final VoidCallback onGridTapped;
 
-  const XOGrid(this.text, this.gridStyles, this.onGridTapped);
+  const XOGrid(this.text, this.gridStyles, this.onGridTapped, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class XOGrid extends StatelessWidget {
                 fontSize: 32,
                 color: gridStyles!.containsKey('textColor')
                     ? gridStyles!['textColor']!
-                    : AppColors.secondaryColor,
+                    : AppColors.whiteColor,
               ),
             ),
           ),

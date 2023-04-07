@@ -8,7 +8,7 @@ class PlayerCard extends StatelessWidget {
 
   final Map<String, Color> cardStyles;
 
-  const PlayerCard(this.playerName, this.cardStyles, this.isPlayerX);
+  const PlayerCard(this.playerName, this.cardStyles, this.isPlayerX, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class PlayerCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: cardStyles!.containsKey('backgroundColor')
             ? cardStyles!['backgroundColor']!
-            : AppColors.secondaryColor,
+            : AppColors.whiteColor,
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
           width: 1,

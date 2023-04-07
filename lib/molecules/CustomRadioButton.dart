@@ -10,9 +10,9 @@ class CustomRadioButton extends StatelessWidget {
 
   final ValueChanged<String> onRadioButtonSelected;
 
-  const CustomRadioButton(this.value, this.options, this.cardStyles, this.onRadioButtonSelected);
+  const CustomRadioButton(this.value, this.options, this.cardStyles, this.onRadioButtonSelected, {super.key});
 
-  Widget RadioButton(String title, ValueChanged<String> onRadioButtonSelected, isOptionSelected) {
+  Widget radioButton(String title, ValueChanged<String> onRadioButtonSelected, isOptionSelected) {
     return GestureDetector(
         onTap: () => onRadioButtonSelected(title),
         child: Container(
@@ -37,12 +37,12 @@ class CustomRadioButton extends StatelessWidget {
         ));
   }
 
-  List<Widget> generateRadioButtons() {
+  List<Widget> generateRadioButtons(String val) {
     var list = options.map<List<Widget>>(
       (data) {
         var widgetList = <Widget>[];
         widgetList
-            .add(RadioButton(data, (val) => onRadioButtonSelected(val), value == data));
+            .add(radioButton(data, (val) => onRadioButtonSelected(val), value == data));
         return widgetList;
       },
     ).toList();
@@ -55,7 +55,7 @@ class CustomRadioButton extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: generateRadioButtons(),
+      children: generateRadioButtons(value),
     );
   }
 }
