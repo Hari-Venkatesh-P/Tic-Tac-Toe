@@ -17,7 +17,7 @@ class CustomRadioButton extends StatelessWidget {
         onTap: () => onRadioButtonSelected(title),
         child: Container(
           padding: EdgeInsets.all(10),
-          width: 100,
+          width: 90,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(2),
             border: Border.all(
@@ -29,7 +29,7 @@ class CustomRadioButton extends StatelessWidget {
           child: Center(
             child: Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
               ),
             ),

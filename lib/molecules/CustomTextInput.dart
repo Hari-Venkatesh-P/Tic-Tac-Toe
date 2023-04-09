@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tic_tac_toe/utils/colors.dart';
 
 class CustomTextInput extends StatelessWidget {
   final String value;
@@ -9,7 +10,9 @@ class CustomTextInput extends StatelessWidget {
 
   final TextEditingController textEditingController;
 
-  const CustomTextInput(this.value, this.placeHolderText, this.labelText, this.textEditingController,  {super.key});
+  const CustomTextInput(this.value, this.placeHolderText, this.labelText,
+      this.textEditingController,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +30,7 @@ class CustomTextInput extends StatelessWidget {
         focusedBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.black)),
       ),
+      cursorColor: AppColors.blackColor,
     );
   }
 }
